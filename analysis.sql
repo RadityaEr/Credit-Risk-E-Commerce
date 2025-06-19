@@ -57,3 +57,39 @@ WHERE
   OR decoy_noise > (mean_noise + 3 * std_noise)
   OR decoy_noise < 0;
 
+-- 3. Monthly Repeat Purchase Query --
+WITH ranked_orders AS (
+  SELECT
+    customer_id,
+    order_id,
+    order_date::DATE,
+    DATE_TRUNC('month', order_date::DATE) AS order_month,
+    ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date::DATE) AS purchase_rank
+  FROM e_commerce_transactions
+)
+SELECT
+  order_month,
+  COUNT(DISTINCT customer_id) AS repeat_customers
+FROM ranked_orders
+WHERE purchase_rank > 1 -- pembelian ke-2 ke atas
+GROUP BY order_month
+ORDER BY order_month;
+
+-- EXPLAIN --
+EXPLAIN
+ WITH ranked_orders AS (
+  SELECT
+    customer_id,
+    order_id,
+    order_date::DATE,
+    DATE_TRUNC('month', order_date::DATE) AS order_month,
+    ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date::DATE) AS purchase_rank
+  FROM e_commerce_transactions
+)
+SELECT
+  order_month,
+  COUNT(DISTINCT customer_id) AS repeat_customers
+FROM ranked_orders
+WHERE purchase_rank > 1 -- pembelian ke-2 ke atas
+GROUP BY order_month
+ORDER BY order_month;
