@@ -1,3 +1,4 @@
+-- 1. Pembuatan RFM 
 WITH rfm AS (
   SELECT
     customer_id,
