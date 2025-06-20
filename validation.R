@@ -1,10 +1,10 @@
 # === 1) Setup ===
-.libPaths("E:/Rlibs")  # Sesuaikan path library jika perlu
+.libPaths("E:/Rlibs")  
 
-library(readr)         # Baca CSV
-library(dplyr)         # Manipulasi data
-library(ggplot2)       # Plot calibration curve
-library(ResourceSelection)  # Hosmer-Lemeshow test
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(ResourceSelection)
 
 # === 2) Load CSV ===
 val_data <- read_csv("E:/Coding/PEFindo/notebooks/validation_results.csv")
